@@ -1,15 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>School Application</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h3>School Apllication</h3>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header>
+      <h3>SCHOOL APPLICATION SYSTEM</h3>
+    </header>
+    <main>
+      <input type="text" id="searchByName" />
+      <input type="button" value="Enter" />
+
+      <!-- filtering students by education -->
+
+      <select name="filterEdu" id="eduFilter">
+        <option value="defaultOption" selected hidden disabled>
+          Select programme
+        </option>
+      </select>
+
+      <!-- Buttons for sorting -->
+      <section class="sortButtons">
+        <input type="button" id="sortByFirstName" value="Sort by First name" />
+        <input type="button" id="sortByLastName" value="Sort by Last name" />
+        <input type="button" id="sortByAge" value="Sort by age" />
+      </section>
+
+      <section class="studentContainer">   
+        <div id="firstName">First Name</div>
+        <div id="lastName">Last Name</div>
+        <div id="studentAge">Age</div>
+      </section>
+    </main>
+
     <script src="main.js"></script>
-</body>
+  </body>
 </html>
