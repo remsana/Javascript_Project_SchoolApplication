@@ -5,10 +5,8 @@ let studentLastName = document.querySelector("#lastName");
 let studentAge = document.querySelector("#studentAge");
 
 let sortFirstNameBtn = document.querySelector("#sortByFirstName");
-  let sortLastNameBtn = document.querySelector("#sortByLastName");
-  let sortAgeBtn = document.querySelector("#sortByAge");
-
-let allLists = document.querySelectorAll("li");
+let sortLastNameBtn = document.querySelector("#sortByLastName");
+let sortAgeBtn = document.querySelector("#sortByAge");
 
 //asynch function to fetch data
 
@@ -28,69 +26,126 @@ async function renderData() {
 
   studentDataDisplay(students);
 
-  let ascending = false;
+  //-------------Search Bar------------------
 
-  //sorting the list  
-  sortFirstNameBtn.addEventListener("click", () => {          
-    console.log("first name sort clicked");
-    let array = sortingArray(students, "firstName", ascending);
-    studentDataDisplay(array);
-    ascending = !ascending;
+  let searchBar = document.querySelector("#searchType");
+  let searchBtn = document.querySelector("#searchButton");
+
+  console.log(searchBar);
+
+  searchBtn.addEventListener("click", () => {
+    let userSearchText = searchBar.value.toLowerCase();
+    let filteredStudents = students.filter((student) => {
+      console.log(`1,----- ${student.hobbies}`);
+      let filteredHobbies = student.hobbies.filter((hobby) => {
+        return hobby.toLowerCase().includes(userSearchText);
+      });
+      console.log(`2,----- ${student.hobbies}`);
+      console.log(filteredHobbies.length);
+      return (
+        student.firstName.toLowerCase() == userSearchText ||
+        student.lastName.toLowerCase() == (userSearchText) ||
+        student.programme.toLowerCase().includes(userSearchText) ||
+        filteredHobbies.length > 0
+      );
+    });
+    clearDom();
+    studentDataDisplay(filteredStudents);
   });
 
-  sortLastNameBtn.addEventListener("click", () => {        
-    console.log("Last name sort clicked");
-    let array = sortingArray(students, "lastName", ascending);
-    studentDataDisplay(array);
-    ascending = !ascending;
+  //---------filtering students based on programmes----------
+
+  //looping through the students array to check for unique programmes
+  let selectOptions = document.querySelector("#eduFilter");
+
+  let programmeArray = [];
+  students.forEach((object) => {
+    if (!programmeArray.includes(object.programme))
+      programmeArray.push(object.programme);
+  });
+  // console.log(programmeArray);
+
+  //printing the list of programmes as options on DOM
+  programmeArray.forEach((prog) => {
+    let progOption = document.createElement("option");
+    progOption.value = prog;
+    progOption.textContent = prog;
+    selectOptions.appendChild(progOption);
   });
 
-  sortAgeBtn.addEventListener("click", () => {    
-    console.log("age clicked");
-    let array = sortingArray(students, "age", ascending);
-    studentDataDisplay(array);
-    ascending = !ascending;
+  //event listener for filtering
+  let progFilterBtn = document.querySelector("#progFilterBtn");
+
+  progFilterBtn.addEventListener("click", () => {
+    let userSelect = selectOptions.options[selectOptions.selectedIndex].value;
+    console.log(userSelect);
+
+    let newArrayForProg = students.filter((object) => {
+      return object.programme == userSelect;
+    });
+    clearDom();
+    studentDataDisplay(newArrayForProg);
   });
-  console.log(students);
+
+  //-------------sorting the list------------------
+  let ascendingFirstName = false;
+  let ascendingLastName = false;
+  let ascendingAge = false;
+
+  sortFirstNameBtn.addEventListener("click", () => {
+    clearDom();
+    //console.log("first name sort clicked");
+    let array = sortingArray(students, "firstName", ascendingFirstName);
+    studentDataDisplay(array);
+    ascendingFirstName = !ascendingFirstName;
+  });
+
+  sortLastNameBtn.addEventListener("click", () => {
+    clearDom();
+    //console.log("Last name sort clicked");
+    let array = sortingArray(students, "lastName", ascendingLastName);
+    studentDataDisplay(array);
+    ascendingLastName = !ascendingLastName;
+  });
+
+  sortAgeBtn.addEventListener("click", () => {
+    clearDom();
+    //console.log("age clicked");
+    let array = sortingArray(students, "age", ascendingAge);
+    studentDataDisplay(array);
+    ascendingAge = !ascendingAge;
+  });
+  //console.log(students);
 }
 renderData();
 
-//_____Functions_____
+//------Functions-----
 
 //Function to display the student list on DOM
 
 let studentDataDisplay = (array) => {
-    let studentFirstNameUl = document.createElement("ul");
-    studentFirstName.appendChild(studentFirstNameUl);
-  
-    let studentLastNameUl = document.createElement("ul");
-    studentLastName.appendChild(studentLastNameUl);
-  
-    let studentAgeUl = document.createElement("ul");
-    studentAge.appendChild(studentAgeUl);
-  
-    array.forEach((student) => {
-      let studentFirstNameList = document.createElement("li");
-      studentFirstNameList.textContent = student.firstName;
-      studentFirstNameList.style.listStyle = "none";
-      studentFirstNameUl.appendChild(studentFirstNameList);
-  
-      let studentLastNameList = document.createElement("li");
-      studentLastNameList.textContent = student.lastName;
-      studentLastNameList.style.listStyle = "none";
-      studentLastNameUl.appendChild(studentLastNameList);
-  
-      let studentAgeList = document.createElement("li");
-      studentAgeList.innerHTML = student.age;
-      studentAgeList.style.listStyle = "none";
-      studentAgeUl.appendChild(studentAgeList);
-    });
-  };
+  array.forEach((student) => {
+    let studentFirstNameList = document.createElement("li");
+    studentFirstNameList.textContent = student.firstName;
+    studentFirstNameList.style.listStyle = "none";
+    studentFirstName.appendChild(studentFirstNameList);
+
+    let studentLastNameList = document.createElement("li");
+    studentLastNameList.textContent = student.lastName;
+    studentLastNameList.style.listStyle = "none";
+    studentLastName.appendChild(studentLastNameList);
+
+    let studentAgeList = document.createElement("li");
+    studentAgeList.innerHTML = student.age;
+    studentAgeList.style.listStyle = "none";
+    studentAge.appendChild(studentAgeList);
+  });
+};
 
 // Function to sort ascending and descending
 
 let sortingArray = (array, sortBy, ascending) => {
-     array.sort(function (a, b) {
+  array.sort((a, b) => {
     if (a[sortBy] > b[sortBy]) return 1;
     if (a[sortBy] < b[sortBy]) return -1;
     return 0;
@@ -99,5 +154,10 @@ let sortingArray = (array, sortBy, ascending) => {
   return array;
 };
 
-
-
+// function to clear DOM
+function clearDom() {
+  let listOfStudents = document.querySelectorAll("li");
+  listOfStudents.forEach((element) => {
+    element.remove();
+  });
+}

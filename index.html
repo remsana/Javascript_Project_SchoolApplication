@@ -13,29 +13,35 @@
       <h3>SCHOOL APPLICATION SYSTEM</h3>
     </header>
     <main>
-      <input type="text" id="searchByName" />
-      <input type="button" value="Enter" />
+      <!-- filtering students via search bar -->
+
+      <div>
+      <input type="text" id="searchType" placeholder="Search for a student"/>
+      <input type="button" value="Enter" id="searchButton"/>
+    </div>
 
       <!-- filtering students by education -->
-
+     <div>
       <select name="filterEdu" id="eduFilter">
         <option value="defaultOption" selected hidden disabled>
           Select programme
         </option>
-      </select>
+              </select>
+        <button id="progFilterBtn">Enter</button>
+      </div>
 
       <!-- Buttons for sorting -->
-      <section class="sortButtons">
-        <input type="button" id="sortByFirstName" value="Sort by First name" />
-        <input type="button" id="sortByLastName" value="Sort by Last name" />
-        <input type="button" id="sortByAge" value="Sort by age" />
-      </section>
+      <div class="sortButtons">
+        <input type="button" id="sortByFirstName" value="Sort by First name &#9650" />
+        <input type="button" id="sortByLastName" value="Sort by Last name &#9650" />
+        <input type="button" id="sortByAge" value="Sort by age &#9650" />
+      </div>
 
-      <section class="studentContainer">   
-        <div id="firstName">First Name</div>
-        <div id="lastName">Last Name</div>
-        <div id="studentAge">Age</div>
-      </section>
+      <div class="studentContainer">   
+        <ul id="firstName">First Name</ul>
+        <ul id="lastName">Last Name</ul>
+        <ul id="studentAge">Age</ul>
+      </div>
     </main>
 
     <script src="main.js"></script>
