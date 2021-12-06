@@ -3,6 +3,7 @@ console.log("Javascript School Project");
 let studentFirstName = document.querySelector("#firstName");
 let studentLastName = document.querySelector("#lastName");
 let studentAge = document.querySelector("#studentAge");
+//let studentInfo = document.querySelector("#studentinfo");
 
 let sortFirstNameBtn = document.querySelector("#sortByFirstName");
 let sortLastNameBtn = document.querySelector("#sortByLastName");
@@ -24,7 +25,7 @@ async function renderData() {
 
   //Creating a list of students by calling the function studentDataDisplay
 
-  studentDataDisplay(students);
+  studentDataDisplay(students, schools);
 
   //-------------Search Bar------------------
 
@@ -36,15 +37,15 @@ async function renderData() {
   searchBtn.addEventListener("click", () => {
     let userSearchText = searchBar.value.toLowerCase();
     let filteredStudents = students.filter((student) => {
-      console.log(`1,----- ${student.hobbies}`);
+      //console.log(`1,----- ${student.hobbies}`);
       let filteredHobbies = student.hobbies.filter((hobby) => {
         return hobby.toLowerCase().includes(userSearchText);
       });
-      console.log(`2,----- ${student.hobbies}`);
-      console.log(filteredHobbies.length);
+      //console.log(`2,----- ${student.hobbies}`);
+      //console.log(filteredHobbies.length);
       return (
         student.firstName.toLowerCase() == userSearchText ||
-        student.lastName.toLowerCase() == (userSearchText) ||
+        student.lastName.toLowerCase() == userSearchText ||
         student.programme.toLowerCase().includes(userSearchText) ||
         filteredHobbies.length > 0
       );
@@ -123,16 +124,72 @@ renderData();
 
 //Function to display the student list on DOM
 
-let studentDataDisplay = (array) => {
+//variables for printing the list of schools on DOM
+let schoolList = document.querySelector("#schoolList");
+let schoolListULGreen = document.createElement("ul");
+let schoolListULYellow = document.createElement("ul");
+let schoolListULRed = document.createElement("ul");
+
+schoolList.append(schoolListULGreen, schoolListULYellow, schoolListULRed);
+
+function studentDataDisplay(array, array2) {
   array.forEach((student) => {
     let studentFirstNameList = document.createElement("li");
     studentFirstNameList.textContent = student.firstName;
     studentFirstNameList.style.listStyle = "none";
     studentFirstName.appendChild(studentFirstNameList);
 
+    studentFirstNameList.addEventListener("click", () => {
+      schoolListULGreen.innerHTML = ""; //To print the list only once
+      schoolListULYellow.innerHTML ="";
+      schoolListULRed.innerHTML = "";
+
+      array2.forEach((school) => {
+        let activityMatch = "not match";
+        let progMatch = "not match";
+
+        school.programmes.forEach((prog) => {
+          if (prog == student.programme) {
+            progMatch = "match";
+          }
+        });
+
+        if (school.activities == "No activities") {
+          activityMatch = "not match";
+        } else {
+          school.activities.forEach((activity) => {
+            student.hobbies.forEach((hobby) => {
+              if (activity == hobby) {
+                activityMatch = "match";
+              }
+            });
+          });
+        }
+        if (activityMatch == "match" && progMatch == "match") {
+          let schoolNameLi = document.createElement("li");
+          schoolNameLi.textContent = school.name;
+          schoolNameLi.style.color = "green";
+          
+          schoolListULGreen.appendChild(schoolNameLi);
+        } else if (activityMatch == "match" && progMatch == "not match") {
+          let schoolNameLi = document.createElement("li");
+          schoolNameLi.textContent = school.name;
+          schoolNameLi.style.color = "red";
+          
+          schoolListULRed.appendChild(schoolNameLi);
+        } else if (activityMatch == "not match" && progMatch == "match"){
+          let schoolNameLi = document.createElement("li");
+          schoolNameLi.textContent = school.name;
+          schoolNameLi.style.color = "orange";
+          schoolListULYellow.appendChild(schoolNameLi);
+        }
+      });
+    });
+
     let studentLastNameList = document.createElement("li");
     studentLastNameList.textContent = student.lastName;
     studentLastNameList.style.listStyle = "none";
+
     studentLastName.appendChild(studentLastNameList);
 
     let studentAgeList = document.createElement("li");
@@ -140,7 +197,7 @@ let studentDataDisplay = (array) => {
     studentAgeList.style.listStyle = "none";
     studentAge.appendChild(studentAgeList);
   });
-};
+}
 
 // Function to sort ascending and descending
 
