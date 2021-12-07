@@ -32,22 +32,26 @@
 
       <!-- Buttons for sorting -->
       <div class="sortButtons">
-        <input type="button" id="sortByFirstName" value="Sort by First name &#9650 &#9660" />
-        <input type="button" id="sortByLastName" value="Sort by Last name &#9650 &#9660" />
-        <input type="button" id="sortByAge" value="Sort by age &#9650 &#9660" />
+        <input type="button" id="sortByFirstName" value="Sort by First name " />
+        <input type="button" id="sortByLastName" value="Sort by Last name &" />
+        <input type="button" id="sortByAge" value="Sort by age " />
       </div>
 
       <div class="studentContainer">   
         <ul id="firstName">First Name</ul>
         <ul id="lastName">Last Name</ul>
         <ul id="studentAge">Age</ul>
-        <!-- <ul id="studentinfo">Details</ul> -->
+        
       </div>
 
-      <div id="schoolList"> 
+<div id="schoolList" class="modal" >
+  <span id="closeBtn" class="close">&times;</span>
+  <div  class="modalContent"> 
+    
 
-
-      </div>
+  </div>
+</div>
+      
     </main>
 
     <script src="main.js"></script>

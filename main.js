@@ -3,14 +3,12 @@ console.log("Javascript School Project");
 let studentFirstName = document.querySelector("#firstName");
 let studentLastName = document.querySelector("#lastName");
 let studentAge = document.querySelector("#studentAge");
-//let studentInfo = document.querySelector("#studentinfo");
 
 let sortFirstNameBtn = document.querySelector("#sortByFirstName");
 let sortLastNameBtn = document.querySelector("#sortByLastName");
 let sortAgeBtn = document.querySelector("#sortByAge");
 
 //asynch function to fetch data
-
 async function fetchData(URL) {
   let response = await fetch(URL);
   let data = await response.json();
@@ -18,21 +16,50 @@ async function fetchData(URL) {
 }
 
 //async function to call the above function and start using the data
-
 async function renderData() {
   let students = await fetchData("https://api.mocki.io/v2/01047e91/students");
   let schools = await fetchData("https://api.mocki.io/v2/01047e91/schools");
 
-  //Creating a list of students by calling the function studentDataDisplay
+  //Creating the list of students by calling the function studentDataDisplay
 
   studentDataDisplay(students, schools);
+
+  //-------------sorting the list------------------
+  let ascendingFirstName = false;
+  let ascendingLastName = false;
+  let ascendingAge = false;
+
+  sortFirstNameBtn.addEventListener("click", () => {
+    clearDom();
+    //console.log("first name sort clicked");
+    let arrayFirstName = sortingArray(students, "firstName", ascendingFirstName);
+    studentDataDisplay(arrayFirstName, schools);
+    ascendingFirstName = !ascendingFirstName;
+  });
+
+  sortLastNameBtn.addEventListener("click", () => {
+    clearDom();
+    //console.log("Last name sort clicked");
+    let arrayLastName = sortingArray(students, "lastName", ascendingLastName);
+    studentDataDisplay(arrayLastName, schools);
+    ascendingLastName = !ascendingLastName;
+  });
+
+  sortAgeBtn.addEventListener("click", () => {
+    clearDom();
+    //console.log("age clicked");
+    let arrayAge = sortingArray(students, "age", ascendingAge);
+    studentDataDisplay(arrayAge, schools);
+    ascendingAge = !ascendingAge;
+  });
+  //console.log(students);
 
   //-------------Search Bar------------------
 
   let searchBar = document.querySelector("#searchType");
   let searchBtn = document.querySelector("#searchButton");
 
-  console.log(searchBar);
+  //console.log(searchBar);
 
   searchBtn.addEventListener("click", () => {
     let userSearchText = searchBar.value.toLowerCase();
@@ -51,7 +78,9 @@ async function renderData() {
       );
     });
     clearDom();
-    studentDataDisplay(filteredStudents);
+    studentDataDisplay(filteredStudents, schools);
+    
+    
   });
 
   //---------filtering students based on programmes----------
@@ -85,66 +114,47 @@ async function renderData() {
       return object.programme == userSelect;
     });
     clearDom();
-    studentDataDisplay(newArrayForProg);
+    studentDataDisplay(newArrayForProg, schools);
   });
 
-  //-------------sorting the list------------------
-  let ascendingFirstName = false;
-  let ascendingLastName = false;
-  let ascendingAge = false;
-
-  sortFirstNameBtn.addEventListener("click", () => {
-    clearDom();
-    //console.log("first name sort clicked");
-    let array = sortingArray(students, "firstName", ascendingFirstName);
-    studentDataDisplay(array);
-    ascendingFirstName = !ascendingFirstName;
-  });
-
-  sortLastNameBtn.addEventListener("click", () => {
-    clearDom();
-    //console.log("Last name sort clicked");
-    let array = sortingArray(students, "lastName", ascendingLastName);
-    studentDataDisplay(array);
-    ascendingLastName = !ascendingLastName;
-  });
-
-  sortAgeBtn.addEventListener("click", () => {
-    clearDom();
-    //console.log("age clicked");
-    let array = sortingArray(students, "age", ascendingAge);
-    studentDataDisplay(array);
-    ascendingAge = !ascendingAge;
-  });
-  //console.log(students);
+  
 }
 renderData();
 
 //------Functions-----
 
-//Function to display the student list on DOM
-
 //variables for printing the list of schools on DOM
 let schoolList = document.querySelector("#schoolList");
+let schoolContent = document.querySelector(".modalContent");
+let modalClose = document.querySelector("#closeBtn");
+
+//creating UL based on the colors
 let schoolListULGreen = document.createElement("ul");
 let schoolListULYellow = document.createElement("ul");
 let schoolListULRed = document.createElement("ul");
 
-schoolList.append(schoolListULGreen, schoolListULYellow, schoolListULRed);
+//appending all teh color ULs to a common container called schoolContent
+schoolContent.append(schoolListULGreen, schoolListULYellow, schoolListULRed);
 
-function studentDataDisplay(array, array2) {
-  array.forEach((student) => {
+//Function to display the student list on DOM
+
+//creating li for firstname
+let studentDataDisplay = (studentArray, schoolArray) => {
+  studentArray.forEach((student) => {
     let studentFirstNameList = document.createElement("li");
     studentFirstNameList.textContent = student.firstName;
     studentFirstNameList.style.listStyle = "none";
+    studentFirstNameList.className = "firstNameClass";
     studentFirstName.appendChild(studentFirstNameList);
 
+    //to get the school details for each student when clicked on firstname
     studentFirstNameList.addEventListener("click", () => {
+      schoolList.style.display = "block";
       schoolListULGreen.innerHTML = ""; //To print the list only once
-      schoolListULYellow.innerHTML ="";
+      schoolListULYellow.innerHTML = "";
       schoolListULRed.innerHTML = "";
 
-      array2.forEach((school) => {
+      schoolArray.forEach((school) => {
         let activityMatch = "not match";
         let progMatch = "not match";
 
@@ -165,33 +175,46 @@ function studentDataDisplay(array, array2) {
             });
           });
         }
+        //printing different schools that will be color-coded
         if (activityMatch == "match" && progMatch == "match") {
           let schoolNameLi = document.createElement("li");
           schoolNameLi.textContent = school.name;
           schoolNameLi.style.color = "green";
-          
+          schoolNameLi.style.fontWeight = "bold";
           schoolListULGreen.appendChild(schoolNameLi);
-        } else if (activityMatch == "match" && progMatch == "not match") {
+        } else if (activityMatch == "not match" && progMatch == "match") {
+          let schoolNameLi = document.createElement("li");
+          schoolNameLi.textContent = school.name;
+          schoolNameLi.style.color = "rgb(252,174,1)";
+          schoolListULYellow.appendChild(schoolNameLi);
+        } else {
           let schoolNameLi = document.createElement("li");
           schoolNameLi.textContent = school.name;
           schoolNameLi.style.color = "red";
-          
           schoolListULRed.appendChild(schoolNameLi);
-        } else if (activityMatch == "not match" && progMatch == "match"){
-          let schoolNameLi = document.createElement("li");
-          schoolNameLi.textContent = school.name;
-          schoolNameLi.style.color = "orange";
-          schoolListULYellow.appendChild(schoolNameLi);
         }
       });
-    });
 
+      //Modal functionality to close the div
+      modalClose.addEventListener("click", () => {
+        schoolList.style.display = "none";
+      });
+
+      //       window.onclick = function (event) {
+      // console.log(event);
+
+      //         if (event.target == schoolList) {
+      //           schoolList.style.display = "none";
+      //         }
+      //       };
+    });
+    //printing lastname
     let studentLastNameList = document.createElement("li");
     studentLastNameList.textContent = student.lastName;
     studentLastNameList.style.listStyle = "none";
-
     studentLastName.appendChild(studentLastNameList);
 
+    //printing age
     let studentAgeList = document.createElement("li");
     studentAgeList.innerHTML = student.age;
     studentAgeList.style.listStyle = "none";
@@ -212,7 +235,7 @@ let sortingArray = (array, sortBy, ascending) => {
 };
 
 // function to clear DOM
-function clearDom() {
+let clearDom = () => {
   let listOfStudents = document.querySelectorAll("li");
   listOfStudents.forEach((element) => {
     element.remove();
