@@ -22,7 +22,9 @@ async function renderData() {
 
   //Creating the list of students by calling the function studentDataDisplay
 
-  studentDataDisplay(students, schools);
+  
+  let filteredArrayOfStudents = students;
+  studentDataDisplay(filteredArrayOfStudents, schools);
 
   //-------------sorting the list------------------
   let ascendingFirstName = false;
@@ -32,7 +34,7 @@ async function renderData() {
   sortFirstNameBtn.addEventListener("click", () => {
     clearDom();
     //console.log("first name sort clicked");
-    let arrayFirstName = sortingArray(students, "firstName", ascendingFirstName);
+    let arrayFirstName = sortingArray(filteredArrayOfStudents, "firstName", ascendingFirstName);
     studentDataDisplay(arrayFirstName, schools);
     ascendingFirstName = !ascendingFirstName;
   });
@@ -40,7 +42,7 @@ async function renderData() {
   sortLastNameBtn.addEventListener("click", () => {
     clearDom();
     //console.log("Last name sort clicked");
-    let arrayLastName = sortingArray(students, "lastName", ascendingLastName);
+    let arrayLastName = sortingArray(filteredArrayOfStudents, "lastName", ascendingLastName);
     studentDataDisplay(arrayLastName, schools);
     ascendingLastName = !ascendingLastName;
   });
@@ -48,7 +50,7 @@ async function renderData() {
   sortAgeBtn.addEventListener("click", () => {
     clearDom();
     //console.log("age clicked");
-    let arrayAge = sortingArray(students, "age", ascendingAge);
+    let arrayAge = sortingArray(filteredArrayOfStudents, "age", ascendingAge);
     studentDataDisplay(arrayAge, schools);
     ascendingAge = !ascendingAge;
   });
@@ -61,9 +63,9 @@ async function renderData() {
 
   //console.log(searchBar);
 
-  searchBtn.addEventListener("click", () => {
+  searchBtn.addEventListener("click", () => {    
     let userSearchText = searchBar.value.toLowerCase();
-    let filteredStudents = students.filter((student) => {
+    filteredArrayOfStudents = students.filter((student) => {
       //console.log(`1,----- ${student.hobbies}`);
       let filteredHobbies = student.hobbies.filter((hobby) => {
         return hobby.toLowerCase().includes(userSearchText);
@@ -77,8 +79,9 @@ async function renderData() {
         filteredHobbies.length > 0
       );
     });
+    searchBar.value = "";
     clearDom();
-    studentDataDisplay(filteredStudents, schools);
+    studentDataDisplay(filteredArrayOfStudents, schools);
     
     
   });
@@ -104,22 +107,32 @@ async function renderData() {
   });
 
   //event listener for filtering
-  let progFilterBtn = document.querySelector("#progFilterBtn");
+  //let progFilterBtn = document.querySelector("#progFilterBtn");
 
-  progFilterBtn.addEventListener("click", () => {
+  selectOptions.addEventListener("change", () => {
     let userSelect = selectOptions.options[selectOptions.selectedIndex].value;
     console.log(userSelect);
 
-    let newArrayForProg = students.filter((object) => {
+    filteredArrayOfStudents = students.filter((object) => {
       return object.programme == userSelect;
     });
     clearDom();
-    studentDataDisplay(newArrayForProg, schools);
+    studentDataDisplay(filteredArrayOfStudents, schools);
   });
 
+  //reset
+
+let resetButton = document.querySelector("#resetBtn");
+resetButton.addEventListener("click", () =>{
+    clearDom();
+    filteredArrayOfStudents = students;
+  studentDataDisplay(filteredArrayOfStudents, schools);
+});
   
 }
 renderData();
+
+
 
 //------Functions-----
 
@@ -175,7 +188,7 @@ let studentDataDisplay = (studentArray, schoolArray) => {
             });
           });
         }
-        //printing different schools that will be color-coded
+        //printing schools that will be color-coded
         if (activityMatch == "match" && progMatch == "match") {
           let schoolNameLi = document.createElement("li");
           schoolNameLi.textContent = school.name;
@@ -199,15 +212,7 @@ let studentDataDisplay = (studentArray, schoolArray) => {
       modalClose.addEventListener("click", () => {
         schoolList.style.display = "none";
       });
-
-      //       window.onclick = function (event) {
-      // console.log(event);
-
-      //         if (event.target == schoolList) {
-      //           schoolList.style.display = "none";
-      //         }
-      //       };
-    });
+     });
     //printing lastname
     let studentLastNameList = document.createElement("li");
     studentLastNameList.textContent = student.lastName;

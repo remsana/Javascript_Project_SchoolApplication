@@ -24,34 +24,30 @@ header h3 {
   padding-top: 15px;
 }
 
-.sortButtons {
-  display: flex;
-  justify-content: space-between;
-  margin: 10px auto;
-  width: 100%;
-}
-
-.sortButtons input[type="button"] {
-  appearance: none;
-  background-color: rgb(7,9,84);
-  border-radius: 5px;
-  color: honeydew;
-  padding: 10px;
-  border: none;
+.labelStudent {
+  text-transform: uppercase;
+  color: rgb(21, 24, 21);
   cursor: pointer;
+  font-size: small;
+  font-weight: bold;
+  
+  padding: 10px 0 10px 0;
+  margin: 10px 0 10px 0;
 }
 
 .studentContainer {
-  /* display: grid;
-  grid-template-areas: "first second third"; 
-  border: solid black; */
-
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: center;
   margin: 10px auto;
-  width: 100%;
+  /* width: 100%; */
 
   border: solid red;
+}
+
+.firstNameClass {
+  color: rgb(12, 37, 109);
+  cursor: pointer;
 }
 
 
@@ -60,9 +56,8 @@ header h3 {
   display: none; /* Hidden by default */
   position: absolute; /* Stay in place */  
   border:black solid;
-  /* padding-top: 15px; */
 
-}
+  }
 
 .close {
   float: right;
@@ -70,10 +65,7 @@ header h3 {
   color: black;
   border: 0 2px 0 0;
   padding-right: 5px;
-  margin: 0;
-
-  /* border: solid red; */
-  
+  margin: 0;  
 }
 
 .modalContent{
@@ -86,9 +78,12 @@ header h3 {
   cursor: pointer;
 }
 
-
-.firstNameClass {
-  color: rgb(12, 37, 109);
-  cursor: pointer;
+#resetBtn{
+  float: right;
+  background-color: rgb(7,9,84);
+  border-radius: 5px;
+  color: honeydew;
+  padding: 2px;
 }
+
 
