@@ -11,10 +11,12 @@ body {
 
 header {
   background-color: rgb(7,9,84);
+  background-image: radial-gradient(rgb(7,9,84), rgb(11, 82, 100));
   border-radius: 5px;
   /* width: 100%; */
   height: 50px;
   justify-items: center;
+  margin: 10px;
 }
 
 header h3 {
@@ -23,6 +25,39 @@ header h3 {
   text-align: center;
   padding-top: 15px;
 }
+
+#searchInputDiv, #selectOptionsDiv{
+margin: 10px 0 10px 0;
+}
+
+#textForOptions {
+  display: inline-block;
+  margin-right: 0;
+}
+
+#eduFilter{
+  margin-left: 0;
+  border: double rgb(122, 124, 185);
+  border-radius: 5px;
+}
+
+#searchType, #searchButton, #resetBtn {
+  margin: 10px 0 10px 0;
+  border: double rgb(122, 124, 185);
+  border-radius: 5px;
+  }
+
+  #searchType {
+    padding: 3px;
+  }
+
+  #searchButton{
+  background-color: rgb(7,9,84);
+  background-image: radial-gradient(rgb(7,9,84), rgb(11, 82, 100));
+  border-radius: 5px;
+  color: honeydew;
+  padding: 3px;
+  }
 
 .labelStudent {
   text-transform: uppercase;
@@ -42,11 +77,12 @@ header h3 {
   margin: 10px auto;
   /* width: 100%; */
 
-  border: solid red;
+  border: double rgb(122, 124, 185);
+  border-radius: 5px;
 }
 
 .firstNameClass {
-  color: rgb(12, 37, 109);
+  color: rgb(19, 71, 224);
   cursor: pointer;
 }
 
@@ -55,7 +91,10 @@ header h3 {
 .modal{
   display: none; /* Hidden by default */
   position: absolute; /* Stay in place */  
-  border:black solid;
+
+  border: double rgb(122, 124, 185);
+  border-radius: 5px;
+  margin: 10px 0 10px 0;
 
   }
 
@@ -81,9 +120,10 @@ header h3 {
 #resetBtn{
   float: right;
   background-color: rgb(7,9,84);
+  background-image: radial-gradient(rgb(7,9,84), rgb(11, 82, 100));
   border-radius: 5px;
   color: honeydew;
-  padding: 2px;
+  padding: 3px;
 }
 
 

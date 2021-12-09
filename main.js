@@ -1,53 +1,64 @@
 console.log("Javascript School Project");
 
+//ULs where all Li's will be appended
 let studentFirstName = document.querySelector("#firstName");
 let studentLastName = document.querySelector("#lastName");
 let studentAge = document.querySelector("#studentAge");
 
-let sortFirstNameBtn = document.querySelector("#sortByFirstName");
-let sortLastNameBtn = document.querySelector("#sortByLastName");
-let sortAgeBtn = document.querySelector("#sortByAge");
+//the labels which when clicked will sort the list
+let sortByFirstName = document.querySelector("#sortByFirstName");
+let sortByLastName = document.querySelector("#sortByLastName");
+let sortByAge = document.querySelector("#sortByAge");
 
-//asynch function to fetch data
+//Fetch data using asynv and await
 async function fetchData(URL) {
   let response = await fetch(URL);
   let data = await response.json();
   return data;
 }
 
-//async function to call the above function and start using the data
+//Calling the above function and start using the data
 async function renderData() {
   let students = await fetchData("https://api.mocki.io/v2/01047e91/students");
   let schools = await fetchData("https://api.mocki.io/v2/01047e91/schools");
 
   //Creating the list of students by calling the function studentDataDisplay
-
-  
+  //duplicating the students array ito a filtered array which will be used to sort later
   let filteredArrayOfStudents = students;
   studentDataDisplay(filteredArrayOfStudents, schools);
 
-  //-------------sorting the list------------------
+  //-------------sorting the list------------------//
+
+  //declaring the ascendng values as false so sorting both ways (asscending and descending) is possible
   let ascendingFirstName = false;
   let ascendingLastName = false;
   let ascendingAge = false;
 
-  sortFirstNameBtn.addEventListener("click", () => {
+  sortByFirstName.addEventListener("click", () => {
     clearDom();
     //console.log("first name sort clicked");
-    let arrayFirstName = sortingArray(filteredArrayOfStudents, "firstName", ascendingFirstName);
+    let arrayFirstName = sortingArray(
+      filteredArrayOfStudents,
+      "firstName",
+      ascendingFirstName
+    );
     studentDataDisplay(arrayFirstName, schools);
-    ascendingFirstName = !ascendingFirstName;
+    ascendingFirstName = !ascendingFirstName; //making it true will only sort it once
   });
 
-  sortLastNameBtn.addEventListener("click", () => {
+  sortByLastName.addEventListener("click", () => {
     clearDom();
     //console.log("Last name sort clicked");
-    let arrayLastName = sortingArray(filteredArrayOfStudents, "lastName", ascendingLastName);
+    let arrayLastName = sortingArray(
+      filteredArrayOfStudents,
+      "lastName",
+      ascendingLastName
+    );
     studentDataDisplay(arrayLastName, schools);
     ascendingLastName = !ascendingLastName;
   });
 
-  sortAgeBtn.addEventListener("click", () => {
+  sortByAge.addEventListener("click", () => {
     clearDom();
     //console.log("age clicked");
     let arrayAge = sortingArray(filteredArrayOfStudents, "age", ascendingAge);
@@ -56,41 +67,46 @@ async function renderData() {
   });
   //console.log(students);
 
-  //-------------Search Bar------------------
+  //-------------Search Bar------------------//
 
-  let searchBar = document.querySelector("#searchType");
-  let searchBtn = document.querySelector("#searchButton");
+  let searchBar = document.querySelector("#searchType"); //where user types
+  let searchBtn = document.querySelector("#searchButton"); //the enter button
 
   //console.log(searchBar);
 
-  searchBtn.addEventListener("click", () => {    
-    let userSearchText = searchBar.value.toLowerCase();
-    filteredArrayOfStudents = students.filter((student) => {
-      //console.log(`1,----- ${student.hobbies}`);
-      let filteredHobbies = student.hobbies.filter((hobby) => {
-        return hobby.toLowerCase().includes(userSearchText);
+  searchBtn.addEventListener("click", () => {
+    if (searchBar.value == "") {
+      alert("Please type to proceed..");
+    } else {
+      let userSearchText = searchBar.value.toLowerCase();
+      filteredArrayOfStudents = students.filter((student) => {
+        //console.log(`1,----- ${student.hobbies}`);
+        let filteredHobbies = student.hobbies.filter((hobby) => {
+          return hobby.toLowerCase().includes(userSearchText);
+        });
+        //console.log(`2,----- ${student.hobbies}`);
+        //console.log(filteredHobbies.length);
+        return (
+          student.firstName.toLowerCase() == userSearchText ||
+          student.lastName.toLowerCase() == userSearchText ||
+          student.programme.toLowerCase().includes(userSearchText) ||
+          filteredHobbies.length > 0
+        );
       });
-      //console.log(`2,----- ${student.hobbies}`);
-      //console.log(filteredHobbies.length);
-      return (
-        student.firstName.toLowerCase() == userSearchText ||
-        student.lastName.toLowerCase() == userSearchText ||
-        student.programme.toLowerCase().includes(userSearchText) ||
-        filteredHobbies.length > 0
-      );
-    });
+    }
+
+    console.log(filteredArrayOfStudents);
     searchBar.value = "";
     clearDom();
     studentDataDisplay(filteredArrayOfStudents, schools);
-    
-    
   });
 
-  //---------filtering students based on programmes----------
+  //---------filtering students based on programmes from drop-down----------//
 
-  //looping through the students array to check for unique programmes
+  //select element from HTML
   let selectOptions = document.querySelector("#eduFilter");
 
+  //looping through the students array to check for unique programmes
   let programmeArray = [];
   students.forEach((object) => {
     if (!programmeArray.includes(object.programme))
@@ -107,8 +123,7 @@ async function renderData() {
   });
 
   //event listener for filtering
-  //let progFilterBtn = document.querySelector("#progFilterBtn");
-
+  
   selectOptions.addEventListener("change", () => {
     let userSelect = selectOptions.options[selectOptions.selectedIndex].value;
     console.log(userSelect);
@@ -120,21 +135,22 @@ async function renderData() {
     studentDataDisplay(filteredArrayOfStudents, schools);
   });
 
-  //reset
+  //reset buton
 
-let resetButton = document.querySelector("#resetBtn");
-resetButton.addEventListener("click", () =>{
+  let resetButton = document.querySelector("#resetBtn");
+  resetButton.addEventListener("click", () => {
     clearDom();
     filteredArrayOfStudents = students;
-  studentDataDisplay(filteredArrayOfStudents, schools);
-});
-  
+    studentDataDisplay(filteredArrayOfStudents, schools);
+    //schoolList.innerHTML = "";
+    searchBar.value = "";
+  });
 }
 renderData();
 
+//------Functions-----//
 
-
-//------Functions-----
+// 1. Function for displaying the list of students and schools on Dom
 
 //variables for printing the list of schools on DOM
 let schoolList = document.querySelector("#schoolList");
@@ -146,7 +162,7 @@ let schoolListULGreen = document.createElement("ul");
 let schoolListULYellow = document.createElement("ul");
 let schoolListULRed = document.createElement("ul");
 
-//appending all teh color ULs to a common container called schoolContent
+//appending all the color ULs to a common container called schoolContent
 schoolContent.append(schoolListULGreen, schoolListULYellow, schoolListULRed);
 
 //Function to display the student list on DOM
@@ -157,7 +173,7 @@ let studentDataDisplay = (studentArray, schoolArray) => {
     let studentFirstNameList = document.createElement("li");
     studentFirstNameList.textContent = student.firstName;
     studentFirstNameList.style.listStyle = "none";
-    studentFirstNameList.className = "firstNameClass";
+    studentFirstNameList.className = "firstNameClass"; //to style it later
     studentFirstName.appendChild(studentFirstNameList);
 
     //to get the school details for each student when clicked on firstname
@@ -212,7 +228,7 @@ let studentDataDisplay = (studentArray, schoolArray) => {
       modalClose.addEventListener("click", () => {
         schoolList.style.display = "none";
       });
-     });
+    });
     //printing lastname
     let studentLastNameList = document.createElement("li");
     studentLastNameList.textContent = student.lastName;
@@ -225,7 +241,7 @@ let studentDataDisplay = (studentArray, schoolArray) => {
     studentAgeList.style.listStyle = "none";
     studentAge.appendChild(studentAgeList);
   });
-}
+};
 
 // Function to sort ascending and descending
 
@@ -245,4 +261,4 @@ let clearDom = () => {
   listOfStudents.forEach((element) => {
     element.remove();
   });
-}
+};

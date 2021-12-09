@@ -15,56 +15,43 @@
     <main>
       <!-- filtering students via search bar -->
 
-      <div>
+      <div id="searchInputDiv">
       <input type="text" id="searchType" placeholder="Search for a student"/>
       <input type="button" value="Enter" id="searchButton"/>
-      <button id="resetBtn">Reset</button>
+      <input type="reset" id="resetBtn"/>
+
     </div>
 
       <!-- filtering students by education -->
-     <div> Filter students by a program:
+     <div id="selectOptionsDiv"> 
+       <p id="textForOptions">Filter students by a programme:</p>
       <select name="filterEdu" id="eduFilter">
         <option value="defaultOption" selected hidden disabled>
           Select programme
         </option>
               </select>
-        <!-- <button id="progFilterBtn">Enter</button> -->
-      </div>
-
-      <div>
-
         
-      </div>
-
-      <!-- Buttons for sorting -->
-      <!-- <div class="sortButtons">
-        <input type="button" id="sortByFirstName" value="Sort by First name &#9650 &#9660 " />
-        <input type="button" id="sortByLastName" value="Sort by Last name &#9650 &#9660" />
-        <input type="button" id="sortByAge" value="Sort by age &#9650 &#9660 " />
-      </div> -->
+      </div>     
 
       <div class="studentContainer">   
         <div>
         <label id="sortByFirstName" class="labelStudent">First Name &#9650 &#9660 </label>
         <ul id="firstName"></ul>
-      </div>
-      <div>
+       </div>
+       <div>
         <label id="sortByLastName" class="labelStudent">Last Name &#9650 &#9660</label>
           <ul id="lastName"></ul>
         </div>
         <div>
         <label id="sortByAge" class="labelStudent">Age &#9650 &#9660</label>
           <ul id="studentAge"></ul>
-        </div>
-        
+        </div>        
       </div>
 
-<div id="schoolList" class="modal" >
+  <div id="schoolList" class="modal" >
   <span id="closeBtn" class="close">&times;</span>
-  <div  class="modalContent">   
-
+  <div  class="modalContent"></div>
   </div>
-</div>
       
     </main>
 
