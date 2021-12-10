@@ -23,20 +23,21 @@ async function renderData() {
   let schools = await fetchData("https://api.mocki.io/v2/01047e91/schools");
 
   //Creating the list of students by calling the function studentDataDisplay
-  //duplicating the students array ito a filtered array which will be used to sort later
-  let filteredArrayOfStudents = students;
+
+  let filteredArrayOfStudents = [...students]; //cloning the students array so when we reset it the original order can be printed on DOM
   studentDataDisplay(filteredArrayOfStudents, schools);
 
   //-------------sorting the list------------------//
 
   //declaring the ascendng values as false so sorting both ways (asscending and descending) is possible
+
   let ascendingFirstName = false;
   let ascendingLastName = false;
   let ascendingAge = false;
 
+  //sorting by fisrtname
   sortByFirstName.addEventListener("click", () => {
     clearDom();
-    //console.log("first name sort clicked");
     let arrayFirstName = sortingArray(
       filteredArrayOfStudents,
       "firstName",
@@ -44,11 +45,20 @@ async function renderData() {
     );
     studentDataDisplay(arrayFirstName, schools);
     ascendingFirstName = !ascendingFirstName; //making it true will only sort it once
+
+    if (ascendingFirstName) {
+      sortByFirstName.innerHTML = `First Name &#9650`;
+    } else {
+      sortByFirstName.innerHTML = `First Name &#9660`;
+    }
+    schoolList.style.display = "none";
+    console.log(students);
+    console.log(filteredArrayOfStudents);
   });
 
+  //sorting by lastname
   sortByLastName.addEventListener("click", () => {
     clearDom();
-    //console.log("Last name sort clicked");
     let arrayLastName = sortingArray(
       filteredArrayOfStudents,
       "lastName",
@@ -56,27 +66,38 @@ async function renderData() {
     );
     studentDataDisplay(arrayLastName, schools);
     ascendingLastName = !ascendingLastName;
+
+    if (ascendingLastName) {
+      sortByLastName.innerHTML = `Last Name &#9650`;
+    } else {
+      sortByLastName.innerHTML = `Last Name &#9660`;
+    }
+    schoolList.style.display = "none";
   });
 
+  //sorting by age
   sortByAge.addEventListener("click", () => {
     clearDom();
-    //console.log("age clicked");
     let arrayAge = sortingArray(filteredArrayOfStudents, "age", ascendingAge);
     studentDataDisplay(arrayAge, schools);
     ascendingAge = !ascendingAge;
+
+    if (ascendingAge) {
+      sortByAge.innerHTML = `age &#9650`;
+    } else {
+      sortByAge.innerHTML = `age &#9660`;
+    }
+    schoolList.style.display = "none";
   });
-  //console.log(students);
 
   //-------------Search Bar------------------//
 
   let searchBar = document.querySelector("#searchType"); //where user types
   let searchBtn = document.querySelector("#searchButton"); //the enter button
 
-  //console.log(searchBar);
-
   searchBtn.addEventListener("click", () => {
     if (searchBar.value == "") {
-      alert("Please type to proceed..");
+      alert("Please enter text to proceed..");
     } else {
       let userSearchText = searchBar.value.toLowerCase();
       filteredArrayOfStudents = students.filter((student) => {
@@ -94,9 +115,8 @@ async function renderData() {
         );
       });
     }
-
-    console.log(filteredArrayOfStudents);
     searchBar.value = "";
+    schoolList.style.display = "none";
     clearDom();
     studentDataDisplay(filteredArrayOfStudents, schools);
   });
@@ -112,7 +132,6 @@ async function renderData() {
     if (!programmeArray.includes(object.programme))
       programmeArray.push(object.programme);
   });
-  // console.log(programmeArray);
 
   //printing the list of programmes as options on DOM
   programmeArray.forEach((prog) => {
@@ -123,27 +142,36 @@ async function renderData() {
   });
 
   //event listener for filtering
-  
+
   selectOptions.addEventListener("change", () => {
     let userSelect = selectOptions.options[selectOptions.selectedIndex].value;
-    console.log(userSelect);
-
     filteredArrayOfStudents = students.filter((object) => {
       return object.programme == userSelect;
     });
     clearDom();
     studentDataDisplay(filteredArrayOfStudents, schools);
+    schoolList.style.display = "none";
   });
 
   //reset buton
 
   let resetButton = document.querySelector("#resetBtn");
+
   resetButton.addEventListener("click", () => {
     clearDom();
-    filteredArrayOfStudents = students;
-    studentDataDisplay(filteredArrayOfStudents, schools);
-    //schoolList.innerHTML = "";
+    schoolList.style.display = "none";
     searchBar.value = "";
+    selectOptions[0].selected = true;
+
+    filteredArrayOfStudents = [...students];
+    studentDataDisplay(filteredArrayOfStudents, schools);
+
+    sortByFirstName.innerHTML = `First Name &#9650 &#9660`;
+    sortByLastName.innerHTML = `Last Name &#9650 &#9660`;
+    sortByAge.innerHTML = `Age &#9650 &#9660`;
+
+    console.log(students);
+    console.log(filteredArrayOfStudents);
   });
 }
 renderData();
@@ -229,6 +257,7 @@ let studentDataDisplay = (studentArray, schoolArray) => {
         schoolList.style.display = "none";
       });
     });
+
     //printing lastname
     let studentLastNameList = document.createElement("li");
     studentLastNameList.textContent = student.lastName;

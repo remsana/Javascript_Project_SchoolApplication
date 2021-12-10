@@ -16,24 +16,22 @@
       <!-- filtering students via search bar -->
 
       <div id="searchInputDiv">
-      <input type="text" id="searchType" placeholder="Search for a student"/>
+      <input type="text" id="searchType" placeholder="Enter text"/>
       <input type="button" value="Enter" id="searchButton"/>
       <input type="reset" id="resetBtn"/>
-
     </div>
-
+    
       <!-- filtering students by education -->
      <div id="selectOptionsDiv"> 
-       <p id="textForOptions">Filter students by a programme:</p>
+       <p id="textForOptions">Filter by programme:</p>
       <select name="filterEdu" id="eduFilter">
         <option value="defaultOption" selected hidden disabled>
           Select programme
         </option>
-              </select>
-        
-      </div>     
+      </select>        
+    </div>     
 
-      <div class="studentContainer">   
+     <div class="studentContainer">   
         <div>
         <label id="sortByFirstName" class="labelStudent">First Name &#9650 &#9660 </label>
         <ul id="firstName"></ul>
@@ -49,11 +47,13 @@
       </div>
 
   <div id="schoolList" class="modal" >
+   
   <span id="closeBtn" class="close">&times;</span>
-  <div  class="modalContent"></div>
+  <h3>List of schools:</h3>
+  <div  class="modalContent">   </div>
   </div>
       
-    </main>
+  </main>
 
     <script src="main.js"></script>
   </body>
